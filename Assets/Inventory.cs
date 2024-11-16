@@ -1,33 +1,34 @@
 using System.Collections.Generic;
-using System.Linq;
 
 public class Inventory
 {
-	private List<Item> items;
-	public float MaxWeight { get; private set; }
-	public int MaxItems { get; private set; }
+	private readonly int capacity;
+	private readonly List<string> items;
 
-	public Inventory(float maxWeight, int maxItems)
+	public Inventory(int capacity)
 	{
-		MaxWeight = maxWeight;
-		MaxItems = maxItems;
-		items = new List<Item>();
+		this.capacity = capacity;
+		items = new List<string>();
 	}
 
-	public bool AddItem(Item item)
+	public bool AddItem(string item)
 	{
-		if (items.Count >= MaxItems || GetTotalWeight() + item.Weight > MaxWeight)
+		if (items.Count >= capacity)
+		{
 			return false;
+		}
 
 		items.Add(item);
 		return true;
 	}
 
-	public bool RemoveItem(Item item)
+	public bool RemoveItem(string item)
 	{
 		return items.Remove(item);
 	}
 
-	public float GetTotalWeight() => items.Sum(i => i.Weight);
-	public int GetItemCount() => items.Count;
+	public List<string> GetItems()
+	{
+		return new List<string>(items);
+	}
 }

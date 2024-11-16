@@ -1,42 +1,44 @@
 using NUnit.Framework;
 
+[TestFixture]
 public class InventoryTests
 {
 	private Inventory inventory;
-	private Item sword;
 
 	[SetUp]
-	public void SetUp()
+	public void Setup()
 	{
-		inventory = new Inventory(maxWeight: 10f, maxItems: 5);
-		sword = new Item("Sword", 3f);
+		inventory = new Inventory(3);
 	}
 
 	[Test]
-	public void AddItem_WhenInventoryIsFull_ReturnsFalse()
+	public void AddItem_WhenSpaceAvailable_AddsItem()
 	{
-		for (int i = 0; i < 5; i++)
-			inventory.AddItem(sword);
-
-		Assert.IsFalse(inventory.AddItem(sword));
+		Assert.IsTrue(inventory.AddItem("Sword"));
+		Assert.Contains("Sword", inventory.GetItems());
 	}
 
 	[Test]
-	public void AddItem_WhenExceedingMaxWeight_ReturnsFalse()
+	public void AddItem_WhenInventoryFull_ReturnsFalse()
 	{
-		inventory.AddItem(new Item("Heavy Shield", 5f));
-		inventory.AddItem(new Item("Heavy Shield", 5f));
+		inventory.AddItem("Sword");
+		inventory.AddItem("Shield");
+		inventory.AddItem("Potion");
 
-		Assert.IsFalse(inventory.AddItem(sword));
+		Assert.IsFalse(inventory.AddItem("Bow"));
 	}
 
 	[Test]
-	public void RemoveItem_RemovesItemFromInventory()
+	public void RemoveItem_WhenItemExists_RemovesItem()
 	{
-		inventory.AddItem(sword);
-		Assert.AreEqual(1, inventory.GetItemCount());
+		inventory.AddItem("Sword");
+		Assert.IsTrue(inventory.RemoveItem("Sword"));
+		Assert.IsEmpty(inventory.GetItems());
+	}
 
-		inventory.RemoveItem(sword);
-		Assert.AreEqual(0, inventory.GetItemCount());
+	[Test]
+	public void RemoveItem_WhenItemDoesNotExist_ReturnsFalse()
+	{
+		Assert.IsFalse(inventory.RemoveItem("NonExistentItem"));
 	}
 }
