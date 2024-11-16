@@ -4,7 +4,7 @@ public class Inventory
 {
 	private readonly int capacity;
 	private readonly List<string> items;
-	private readonly Dictionary<string, int> stackLimits; // Límite de pilas por tipo de objeto
+	private readonly Dictionary<string, int> stackLimits;
 
 	public Inventory(int capacity)
 	{
@@ -20,11 +20,13 @@ public class Inventory
 			stackLimits[item] = maxStackSize;
 		}
 
+		if (items.Count + amount > capacity)
+		{
+			return false;
+		}
+
 		for (int i = 0; i < amount; i++)
 		{
-			if (items.Count >= capacity) return false;
-
-			// Cuenta las instancias actuales del objeto
 			int currentCount = items.FindAll(x => x == item).Count;
 			if (currentCount >= stackLimits[item]) return false;
 
