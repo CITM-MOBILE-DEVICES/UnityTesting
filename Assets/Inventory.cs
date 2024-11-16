@@ -3,14 +3,13 @@ using System.Collections.Generic;
 public class Inventory
 {
 	private readonly int capacity;
-	private readonly int maxCapacity;
 	private readonly List<string> items;
 	private readonly Dictionary<string, int> stackLimits;
 
 	public Inventory(int capacity)
 	{
-		this.capacity = maxCapacity;
-		items = new List<string>(capacity);
+		this.capacity = capacity;
+		items = new List<string>();
 		stackLimits = new Dictionary<string, int>();
 	}
 
